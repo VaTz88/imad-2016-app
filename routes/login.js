@@ -3,7 +3,6 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var pool = app.get('pool');
-var regex = require('regex-email');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -17,7 +16,7 @@ router.post('/login', function (req, res) {
     var email = req.body.email;
     var password = hash(req.body.password);
 
-    if (!(regex.test(email) && req.body.password.length >= 4)) {
+    if (req.body.password.length >= 4) {
         res.locals.msg = "Please give a valid email id and password";
         res.render('login', {
             pageTitle: "login",

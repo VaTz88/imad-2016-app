@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var pool = app.get('pool');
 var bodyParser = require('body-parser');
-var regex = require('regex-email');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +45,7 @@ router.post('/profile', function (req, res) {
             if (err) {
                 res.status(500).send(err.toString());
             } else {
-                if (req.body.first_name === "" || req.body.last_name === "" || req.body.username === "" || (!regex.test(req.body.email))) {
+                if (req.body.first_name === "" || req.body.last_name === "" || req.body.username === "") {
                     done();
                     res.status(200).send("Please give all required fields in their valid format");
                 } else {
