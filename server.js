@@ -18,8 +18,6 @@ var config = {
 
 var pool = new pg.Pool(config);
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
 app.set('pool', pool);
 
 app.use(session({
