@@ -3,7 +3,6 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var pool = app.get('pool');
-var xssFilters = require('xss-filters');
 var regex = require('regex-email');
 
 router.use(bodyParser.json());
@@ -50,12 +49,12 @@ router.post('/login', function (req, res) {
                     } else if (result.rows.length == 0) {
                         // create user
                         var newusername = email.split('@')[0];
-                        client.query('INSERT INTO "user" ("email_id", "password", "username") VALUES ($1, $2, $3)', [xssFilters.inHTMLData(email), xssFilters.inHTMLData(password), xssFilters.inHTMLData(newusername)], function (err, result) {
+                        client.query('INSERT INTO "user" ("email_id", "password", "username") VALUES ($1, $2, $3)', [(email), (password), (newusername)], function (err, result) {
                             if (err) {
                                 res.status(500).send(err.toString());
                             } else {
                                 client.query('SELECT * FROM "user" WHERE UPPER(email_id) = UPPER($1)', [email], function (err, result) {
-                                    client.query('INSERT INTO "user_details" ("user_id", "first_name") VALUES ($1, $2)', [result.rows[0].user_id, xssFilters.inHTMLData(newusername)], function (err, result) {
+                                    client.query('INSERT INTO "user_details" ("user_id", "first_name") VALUES ($1, $2)', [result.rows[0].user_id, (newusername)], function (err, result) {
                                         if (err) {
                                             res.status(500).send(err.toString());
                                         }

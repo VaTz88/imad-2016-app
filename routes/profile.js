@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var pool = app.get('pool');
 var bodyParser = require('body-parser');
-var xssFilters = require('xss-filters');
 var regex = require('regex-email');
 
 router.use(bodyParser.json());
@@ -51,12 +50,12 @@ router.post('/profile', function (req, res) {
                     done();
                     res.status(200).send("Please give all required fields in their valid format");
                 } else {
-                    client.query('UPDATE "user_details" SET "first_name" = $1, "last_name" = $2, "bio" = $3 WHERE "user_id" = $4', [xssFilters.inHTMLData(req.body.first_name), xssFilters.inHTMLData(req.body.last_name), xssFilters.inHTMLData(req.body.bio), xssFilters.inHTMLData(req.session.auth.userId)], function (err, result) {
+                    client.query('UPDATE "user_details" SET "first_name" = $1, "last_name" = $2, "bio" = $3 WHERE "user_id" = $4', [(req.body.first_name), (req.body.last_name), (req.body.bio), (req.session.auth.userId)], function (err, result) {
                         if (err) {
                             res.status(500).send(err.toString());
                         }
                         else {
-                            client.query('UPDATE "user" SET "username" = $1, "email_id" = $2 WHERE "user_id" = $3', [xssFilters.inHTMLData(req.body.username), xssFilters.inHTMLData(req.body.email), xssFilters.inHTMLData(req.session.auth.userId)], function (err, result) {
+                            client.query('UPDATE "user" SET "username" = $1, "email_id" = $2 WHERE "user_id" = $3', [(req.body.username), (req.body.email), (req.session.auth.userId)], function (err, result) {
                                 done();
                                 if (err) {
                                     res.status(500).send(err.toString());
