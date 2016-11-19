@@ -6,6 +6,157 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
+function createDashboard(data) {
+
+    var pageTitle = "Dashboard";
+    var username = data.username;
+    var allArticleTitle = data.allArticleTitle;
+    var totalArticles = data.totalArticles;
+
+    var dashboardHTML = `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+    <link rel="icon" href="/favicon.png">
+    <title>VzBlog - ${pageTitle}</title>
+    <meta name="description" content="IMAD NPTEL online course 2016 web app" />
+    <meta name="keywords" content="Vatsal, imad, nptel, VaTz88" />
+    <meta name="author" content="Vatsal Joshi" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="/css/common.css" rel="stylesheet">
+	<link href="/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<header>
+<nav class="navbar navbar-default navbar-static-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+
+    <a class="navbar-brand" href="/">VzBlog</a></div>
+
+    <div class="collapse navbar-collapse" id="mainNavBar">
+				<ul class="nav navbar-nav">
+					<li id="blogNavButton"><a href="/">Home</a></li>
+				</ul>
+				<form id="searchBlog-form" class="navbar-form navbar-left">
+					<div class="form-group">
+						<input id="searchBlog-value" type="text" class="form-control" name="searchBlog" placeholder="Search articles, authors" required>
+						<button id="searchBlog-btn" type="submit" class="btn btn-default">Search</button>
+					</div>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> ${username}<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/profile">Profile</a></li>
+							<li><a href="/dashboard">Dashboard</a></li>
+							<li><a href="/logout">Log Out</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+    </div>
+</nav>
+<div id="loader" style="display:none;"></div>
+	</header>
+
+	<main>
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">${username} - Dashboard</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-12">
+							<h4>Atricles published by you:</h4>
+						</div>
+					</div>
+					<div>
+						<ul class="list-group">`;
+    allArticleTitle.forEach(function (item) {
+        dashboardHTML += '<li class="list-group-item">' + item.article_name + '</li>';
+    });
+    dashboardHTML += `</ul>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<div class="row">
+						<span class="col-sm-8">Total articles published by you <span class="badge">${totalArticles}</span></span>
+						<span class="col-sm-4 text-right"><button id="newArticle-btn" class="btn btn-primary" type="button">New article</button></span>
+					</div>
+				</div>
+				<!-- /panel -->
+			</div>
+			<!-- alert msg -->
+			<div class="alert alert-success alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<span id="alert-msg"></span>
+			</div>
+			<!-- form -->
+			<form class="form-horizontal" id="newArticle-form" method="POST" action="/dashboard">
+				<div class="form-group">
+					<label for="article_name" class="col-sm-2 control-label">Title</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="article_name" placeholder="Article Title" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="article_content" class="col-sm-2 control-label">Content</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" rows="14" name="article_content" placeholder="This article is about..." required></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="article_content" class="col-sm-2 control-label">Tags</label>
+					<div class="col-sm-10">
+						<label class="radio-inline"><input type="radio" name="tag" value="Technology">Technology</label>
+						<label class="radio-inline"><input type="radio" name="tag" value="Politics">Politics</label>
+						<label class="radio-inline"><input type="radio" name="tag" value="Economics">Economics</label>
+						<label class="radio-inline"><input type="radio" name="tag" value="History">History</label>
+						<label class="radio-inline"><input type="radio" name="tag" value="Spiritual">Spiritual</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">Publish</button>
+					</div>
+				</div>
+			</form>
+			<!-- /container -->
+		</div>
+	</main>
+
+	<footer class="container-fluid">
+        <div class="text-center">
+            <span>Made with ♥ by <a href="http://vatz88.in/" target="_blank">Vatsal</a></span>
+        </div>
+    </footer>
+
+	<!-- cndjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
+    <!-- common js -->
+    <script src="/js/common.js"></script>
+	<script src="/js/dashboard.js"></script>
+
+</body>
+
+</html>
+    `;
+
+    return dashboardHTML;
+}
+
 router.get('/dashboard', function (req, res) {
     if (req.session && req.session.auth && req.session.auth.userId) {
         pool.connect(function (err, client, done) {
@@ -20,22 +171,21 @@ router.get('/dashboard', function (req, res) {
                         res.status(500).send(err.toString());
                         done();
                     } else {
-                        res.status(200).render('dashboard', {
-                            pageTitle: "Dashboard",
-                            userName: req.session.auth.username,
-                            allArticleTitle: result.rows,
-                            totalArticles: result.rows.length
-                        });
+                        res.status(200).send(createDashboard(
+                            {
+                                pageTitle: "Dashboard",
+                                username: req.session.auth.username,
+                                allArticleTitle: result.rows,
+                                totalArticles: result.rows.length
+                            }
+                        ));
                     }
                 });
             }
         });
     } else {
-        res.locals.msg = "Session expired, please log in again.";
-        res.render('login', {
-            pageTitle: "login",
-            userName: false
-        });
+        // session expired
+        res.redirect('/login');
     }
 });
 
@@ -63,11 +213,8 @@ router.post('/dashboard', function (req, res) {
             }
         });
     } else {
-        res.locals.msg = "Session expired, please log in again.";
-        res.status(200).render('login', {
-            pageTitle: "login",
-            userName: false
-        });
+        // session expired
+        res.redirect('/login');
     }
 });
 

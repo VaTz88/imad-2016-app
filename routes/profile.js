@@ -200,11 +200,8 @@ router.post('/profile', function (req, res) {
             }
         });
     } else {
-        res.locals.msg = "Session expired, please log in again.";
-        res.status(200).render('login', {
-            pageTitle: "login",
-            username: false
-        });
+        // session expired
+        res.redirect('/login');
     }
 });
 
