@@ -210,14 +210,8 @@ router.get('/login', function (req, res) {
 router.get('/logout', function (req, res) {
     if (req.session && req.session.auth && req.session.auth.userId) {
         delete req.session.auth;
-        res.locals.msg = "Successfully logged out.";
-    } else {
-        res.locals.msg = "No active session";
     }
-    res.render('login', {
-        pageTitle: "login",
-        userName: false
-    });
+    res.redirect('/login');
 });
 
 module.exports = router;
