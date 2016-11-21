@@ -106,7 +106,7 @@ function createDashboard(data) {
 				<!-- /panel -->
 			</div>
 			<!-- alert msg -->
-			<div class="alert alert-success alert-dismissible" role="alert">
+			<div class="alert alert-info alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<span id="alert-msg"></span>
 			</div>
@@ -150,10 +150,11 @@ function createDashboard(data) {
         </div>
     </footer>
 
-	<!-- cndjs -->
+	<!-- cnd -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
+	<script src="https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.min.js"></script>
     <!-- common js -->
     <script src="/js/common.js"></script>
 	<script src="/js/dashboard.js"></script>

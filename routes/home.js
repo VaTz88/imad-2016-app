@@ -66,10 +66,11 @@ function makeHomePage(data) {
         <span>Made with ♥ by <a href="http://vatz88.in/" target="_blank">Vatsal</a></span>
     </div>
 </footer>
-	<!-- cndjs -->
+	<!-- cnd -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
+<script src="https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.min.js"></script>
     <!-- common js -->
     <script src="/js/common.js"></script>
 	<script src="/js/home.js"></script>

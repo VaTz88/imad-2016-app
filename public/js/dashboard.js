@@ -11,7 +11,7 @@ $('#newArticle-btn').on('click', function () {
     $('imput[name="article_name"]').focus();
 });
 
-// on new atricle form submit
+// submit new atricle form
 $("#newArticle-form").submit(function (event) {
     // Stop form from submitting normally
     event.preventDefault();
@@ -22,7 +22,7 @@ $("#newArticle-form").submit(function (event) {
 
     var sendData = {};
     $(formData).each(function (index, obj) {
-        sendData[obj.name] = obj.value;
+        sendData[obj.name] = xssFilters.inHTMLData(obj.value);
     });
 
     // Send the data using post

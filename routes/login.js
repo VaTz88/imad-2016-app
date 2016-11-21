@@ -134,7 +134,9 @@ router.post('/login', function (req, res) {
     var email = req.body.email;
     var password = hash(req.body.password);
 
-    if (req.body.password.length < 4) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!(req.body.password.length >= 4 && re.test(email))) {
         res.status(403).send(makeLoginPage(
             {
                 pageTitle: "Login",

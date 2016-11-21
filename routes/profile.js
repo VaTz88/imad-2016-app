@@ -123,10 +123,11 @@ function createProfile(data) {
         </div>
     </footer>
 
-	<!-- cndjs -->
+	<!-- cnd -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
+    <script src="https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.min.js"></script>
     <!-- common js -->
     <script src="/js/common.js"></script>
 	<script src="/js/profile.js"></script>
@@ -176,7 +177,9 @@ router.post('/profile', function (req, res) {
             if (err) {
                 res.status(500).send(err.toString());
             } else {
-                if (req.body.first_name === "" || req.body.last_name === "" || req.body.username === "") {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                var email = req.body.email;
+                if (req.body.first_name === "" || req.body.last_name === "" || req.body.username === "" || !re.test(email)) {
                     done();
                     res.status(200).send("Please give all required fields in their valid format");
                 } else {

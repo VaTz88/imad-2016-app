@@ -2,9 +2,9 @@ var monthNames = ["January", "February", "March", "April", "May", "June", "July"
 
 var makeArticleCard = function (data) {
 
-    var title = data.article_name;
-    var content = data.article_content;
-    var author = data.first_name + " " + data.last_name;
+    var title = xssFilters.inHTMLData(data.article_name);
+    var content = xssFilters.inHTMLData(data.article_content);
+    var author = xssFilters.inHTMLData(data.first_name) + " " + xssFilters.inHTMLData(data.last_name);
     var tag;
     if (data.tag) {
         tag = "'>" + data.tag;
