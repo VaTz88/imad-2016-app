@@ -8,12 +8,12 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 function createDashboard(data) {
 
-    var pageTitle = "Dashboard";
-    var username = data.username;
-    var allArticleTitle = data.allArticleTitle;
-    var totalArticles = data.totalArticles;
+	var pageTitle = "Dashboard";
+	var username = data.username;
+	var allArticle = data.allArticle;
+	var totalArticles = data.totalArticles;
 
-    var dashboardHTML = `
+	var dashboardHTML = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,10 +82,19 @@ function createDashboard(data) {
 					</div>
 					<div>
 						<ul class="list-group">`;
-    allArticleTitle.forEach(function (item) {
-        dashboardHTML += '<li class="list-group-item">' + item.article_name + '</li>';
-    });
-    dashboardHTML += `</ul>
+	allArticle.forEach(function (item) {
+		dashboardHTML += `<li class="list-group-item" id="` + item.article_id.toString() + `">
+								<div class="row">
+									<span class="col-sm-11 col-md-11 col-lg-11">` + item.article_name.toString() + `</span>
+									<span class="col-sm-1 col-md-1 col-lg-1">
+										<button title="Remove ` + item.article_name.toString() + `" type="button" aria-label="Remove article" class="btn btn-default btn-sm removeArticleBtn" value="` + item.article_id.toString() + `">
+											<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+									</button>
+									</span>
+								</div>
+							</li>`;
+	});
+	dashboardHTML += `</ul>
 					</div>
 				</div>
 				<div class="panel-footer">
@@ -154,68 +163,68 @@ function createDashboard(data) {
 </html>
     `;
 
-    return dashboardHTML;
+	return dashboardHTML;
 }
 
 router.get('/dashboard', function (req, res) {
-    if (req.session && req.session.auth && req.session.auth.userId) {
-        pool.connect(function (err, client, done) {
-            if (err) {
-                res.status(500).send(err.toString());
-                done();
-            }
-            else {
-                client.query('SELECT * FROM "articles" WHERE user_id = $1', [req.session.auth.userId], function (err, result) {
-                    done();
-                    if (err) {
-                        res.status(500).send(err.toString());
-                        done();
-                    } else {
-                        res.status(200).send(createDashboard(
-                            {
-                                pageTitle: "Dashboard",
-                                username: req.session.auth.username,
-                                allArticleTitle: result.rows,
-                                totalArticles: result.rows.length
-                            }
-                        ));
-                    }
-                });
-            }
-        });
-    } else {
-        // session expired
-        res.redirect('/login');
-    }
+	if (req.session && req.session.auth && req.session.auth.userId) {
+		pool.connect(function (err, client, done) {
+			if (err) {
+				res.status(500).send(err.toString());
+				done();
+			}
+			else {
+				client.query('SELECT * FROM "articles" WHERE user_id = $1', [req.session.auth.userId], function (err, result) {
+					done();
+					if (err) {
+						res.status(500).send(err.toString());
+						done();
+					} else {
+						res.status(200).send(createDashboard(
+							{
+								pageTitle: "Dashboard",
+								username: req.session.auth.username,
+								allArticle: result.rows,
+								totalArticles: result.rows.length
+							}
+						));
+					}
+				});
+			}
+		});
+	} else {
+		// session expired
+		res.redirect('/login');
+	}
 });
 
 router.post('/dashboard', function (req, res) {
-    if (req.session && req.session.auth && req.session.auth.userId) {
-        pool.connect(function (err, client, done) {
-            if (err) {
-                res.status(500).send(err.toString());
-                done();
-            } else {
-                if (req.body.article_name === "" || req.body.article_content === "") {
-                    res.status(200).send("Please give all required fields");
-                } else {
-                    // insert into articles
-                    client.query('INSERT INTO "articles" ("article_name", "article_content", "tag", "user_id") VALUES ($1, $2, $3, $4)', [(req.body.article_name), (req.body.article_content), req.body.tag, req.session.auth.userId], function (err, result) {
-                        done();
-                        if (err) {
-                            res.status(500).send(err.toString());
-                        }
-                        else {
-                            res.status(200).send("Article successfully published.");
-                        }
-                    });
-                }
-            }
-        });
-    } else {
-        // session expired
-        res.redirect('/login');
-    }
+	if (req.session && req.session.auth && req.session.auth.userId) {
+		pool.connect(function (err, client, done) {
+			if (err) {
+				res.status(500).send(err.toString());
+				done();
+			} else {
+				if (req.body.article_name === "" || req.body.article_content === "") {
+					res.status(200).send("Please give all required fields");
+				} else {
+					// insert into articles
+					client.query('INSERT INTO "articles" ("article_name", "article_content", "tag", "user_id") VALUES ($1, $2, $3, $4)', [(req.body.article_name), (req.body.article_content), req.body.tag, req.session.auth.userId], function (err, result) {
+						done();
+						if (err) {
+							res.status(500).send(err.toString());
+						}
+						else {
+							res.status(200).send("Article successfully published.");
+						}
+					});
+				}
+			}
+		});
+	} else {
+		// session expired
+		res.redirect('/login');
+	}
 });
 
 module.exports = router;
